@@ -27,12 +27,21 @@ async function getArticlesById(req, res) {
 }
 
 // Post an article
-async function postArticles(req, res) {
+function postArticles(req, res) {
+    
     const { articlename, publishDate, content } = req.body;
     try {
-        const newArticle = new model({ articlename, publishDate, content });
-        const savedArticle = await newArticle.save();
-        res.status(201).json(savedArticle);
+        const newArticle = new model({ 
+            articlename: articlename, 
+            publishDate: publishDate || new Date().toLocaleDateString(), 
+            content: content });
+        newArticle.save().then((data) => {
+             if(!data){
+                return res.status(400).json({message : "something went wrong!"});
+             }
+             res.status(201).send(data);
+        });
+        
     } catch (error) {
         res.status(500).json({ message: "Internal server error!" });
     }
