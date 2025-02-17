@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Blogs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .myblogs-container {
+            justify-content: space-between;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 60%;
+        }
+
+        h1 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .blog-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.7rem;
+            color: #8f8f8f;
+        }
+
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #add-btn{
+            width: 45px;
+            border-radius: 50px;
+        }
+
+        .delete-btn {
+            background-color: red;
+        }
+
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+
+        .blog-heading{
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body onload="handleLoad()">
+
+    <div class="myblogs-container">
+        <div class="blog-heading">
+            <h1>Personal Blog</h1>
+            <button id="add-btn" onclick="addArticle()">+</button>
+        </div>
+        <div id="blog-list"></div>
+    </div>
+
+    <script>
+        async function handleLoad() {
+            try {
+                const response = await fetch('http://localhost:5000/articles/'); 
+                console.log(response);
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    document.getElementById("blog-list").innerHTML = "<p>No Data Found</p>";
+                    return;
+                }
+
+                const blogList = document.getElementById("blog-list");
+                blogList.innerHTML = ""; 
+
+                data.forEach((article) => {
+                    let blogItem = document.createElement("div");
+                    blogItem.classList.add("blog-item");
+
+                    blogItem.innerHTML = `
+                        <h2>${article.articlename}</h2>
+                        <div>
+                             <button onclick="editArticle('${article.id}')">Edit</button>
+                             <button class="delete-btn" onclick="deleteArticle('${article.id}')">Delete</button>
+                        </div>  
+                    `;
+
+                    blogList.appendChild(blogItem);
+                });
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            }
+        }
+
+        function addArticle() {
+            alert("Feature to add an article will be implemented.");
+        }
+
+        function editArticle(id) {
+            alert("Edit Article: " + id);
+        }
+
+        function deleteArticle(id) {
+            alert("Delete Article: " + id);
+        }
+    </script>
+
+</body>
+</html>

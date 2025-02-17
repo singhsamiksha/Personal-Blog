@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Blogs - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .guest-btn {
+            background-color: #28a745;
+        }
+
+        .guest-btn:hover {
+            background-color: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <div class="buttons">
+            <button onclick="handleAdminLogin()">I'm Admin</button>
+            <button class="guest-btn" onclick="handleGuestLogin()">I'm Guest</button>
+        </div>
+    </div>
+
+    <script>
+        function handleAdminLogin() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            
+            if(username === "admin" && password === "admin123") {
+                alert("Admin Login Successful!");
+                window.location.href = "admin.html";
+            } else {
+                alert("Invalid Admin Credentials!");
+            }
+        }
+
+        function handleGuestLogin() {
+            alert("Welcome, Guest!");
+            window.location.href = "guest.html";
+        }
+    </script>
+
+</body>
+</html>
