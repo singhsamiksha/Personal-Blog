@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Blogs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .myblogs-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            margin: 30px;
+        }
+
+        h1 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .blog-item {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+            text-align: left;
+        }
+
+        .blog-item h2 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            background-color: #007bff ;
+            color: white;
+            padding: 20px;
+        }
+
+        .blog-item h3 {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .blog-item p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body onload="handleLoad()">
+
+    <div class="myblogs-container">
+        <div id="blog-list"></div>
+    </div>
+
+    <script>
+        async function handleLoad() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get("id"); 
+            
+            if (!articleId) {
+                document.getElementById("blog-list").innerHTML = "<p>Invalid Article ID</p>";
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/articles/${articleId}`); 
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (!data) {
+                    document.getElementById("blog-list").innerHTML = "<p>No Data Found</p>";
+                    return;
+                }
+
+                const blogList = document.getElementById("blog-list");
+                blogList.innerHTML = ""; 
+
+                let blogItem = document.createElement("div");
+                blogItem.classList.add("blog-item");
+
+                let heading = document.createElement("h2");
+                heading.innerText = data.articlename;
+
+                let date = document.createElement("h3");
+                date.innerText = `Published on: ${data.publishDate}`;
+
+                let content = document.createElement("p");
+                content.innerText = data.content;
+
+                blogItem.appendChild(heading);
+                blogItem.appendChild(date);
+                blogItem.appendChild(content);
+                
+                blogList.appendChild(blogItem);
+
+            } catch (error) {
+                console.error("Error fetching article:", error);
+                document.getElementById("blog-list").innerHTML = `<p>Error loading article: ${error.message}</p>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
