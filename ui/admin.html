@@ -55,7 +55,7 @@
             background-color: #0056b3;
         }
 
-        #add-btn{
+        #add-btn {
             width: 45px;
             border-radius: 50px;
         }
@@ -68,7 +68,7 @@
             background-color: darkred;
         }
 
-        .blog-heading{
+        .blog-heading {
             display: flex;
             justify-content: space-between;
         }
@@ -88,7 +88,6 @@
         async function handleLoad() {
             try {
                 const response = await fetch('http://localhost:5000/articles/'); 
-                console.log(response);
                 const data = await response.json();
 
                 if (data.length === 0) {
@@ -103,14 +102,26 @@
                     let blogItem = document.createElement("div");
                     blogItem.classList.add("blog-item");
 
-                    blogItem.innerHTML = `
-                        <h2>${article.articlename}</h2>
-                        <div>
-                             <button onclick="editArticle('${article.id}')">Edit</button>
-                             <button class="delete-btn" onclick="deleteArticle('${article.id}')">Delete</button>
-                        </div>  
-                    `;
+                    let heading = document.createElement("h2");
+                    heading.innerText = article.articlename;
 
+                    let buttonContainer = document.createElement("div");
+
+                    let editButton = document.createElement("button");
+                    editButton.innerText = "Edit";
+                    editButton.onclick = () => editArticle(article._id);
+
+                    let deleteButton = document.createElement("button");
+                    deleteButton.innerText = "Delete";
+                    deleteButton.classList.add("delete-btn");
+                    deleteButton.onclick = () => deleteArticle(article._id);
+
+                    buttonContainer.appendChild(editButton);
+                    buttonContainer.appendChild(deleteButton);
+
+                    blogItem.appendChild(heading);
+                    blogItem.appendChild(buttonContainer);
+                    
                     blogList.appendChild(blogItem);
                 });
             } catch (error) {
@@ -122,12 +133,41 @@
             alert("Feature to add an article will be implemented.");
         }
 
-        function editArticle(id) {
-            alert("Edit Article: " + id);
+        async function editArticle(id) {
+            try {
+                const url = `http://localhost:5000/articles/${id}`;
+                const request = {
+                    method: 'PUT'
+                };
+                const response = await fetch(url,request);
+                if(!response.ok){
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                alert("Article Edited successfully!");
+                handleLoad(); 
+                
+            } 
+            catch (error) {
+                alert("Error: " + error);
+            }
         }
 
-        function deleteArticle(id) {
-            alert("Delete Article: " + id);
+        async function deleteArticle(id) {
+            try {
+                const url = `http://localhost:5000/articles/${id}`;
+                const request = {
+                    method: 'DELETE'
+                };
+
+                const response = await fetch(url, request);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                alert("Article deleted successfully!");
+                handleLoad();   
+            } catch (error) {
+                alert("Error: " + error);
+            }
         }
     </script>
 
